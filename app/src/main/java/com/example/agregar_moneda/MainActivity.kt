@@ -21,10 +21,13 @@ class MainActivity : AppCompatActivity() {
         var btnCLC = findViewById<Button>(R.id.btnCalcular)
         var txtTipoMoneda = findViewById<EditText>(R.id.txtMoneda)
         var txtValor = findViewById<EditText>(R.id.txtValorMoneda)
+        var txtMxn = findViewById<EditText>(R.id.txtMXN)
+
         /* En esta parte se crean las listas*/
         var monedaAgregarTipo = mutableListOf<String>("YEN")
-        var valor = mutableListOf<Int>()
+        var valor = mutableListOf<Float>(7.12f)
         /*-------------------------------------------------------------------*/
+
         val spinnerAgregar: Spinner = findViewById(R.id.SpnMonedas)
         val arrayAgregar: ArrayAdapter<*>
 
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // Se agregan los datos al spinner
                 monedaAgregarTipo.add(txtTipoMoneda.text.toString())
-                valor.add(txtValor.text.toString().toInt())
+                valor.add(txtValor.text.toString().toFloat())
 
                 Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
             }
@@ -44,6 +47,25 @@ class MainActivity : AppCompatActivity() {
         // Muetsra la lista para el spinner
         arrayAgregar = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, monedaAgregarTipo)
         spinnerAgregar.adapter = arrayAgregar
+
+        // Funcion del boton "Calcular"
+        btnCLC.setOnClickListener {
+            if(txtMxn.text.isEmpty()){
+                Toast.makeText(this, "Ingrese un valor para la conversion", Toast.LENGTH_SHORT).show()
+            }else{
+                val Intent = Intent(this, ConversorMonedaActivity::class.java)
+
+                //Con esa linea de codigo especifica el index de la moneda que escoge
+                var i = spinnerAgregar.selectedItemPosition
+
+                Intent.putExtra("TipoM", spinnerAgregar.selectedItem.toString())
+                Intent.putExtra("ValorM", valor[i])
+                Intent.putExtra("ValorMX", txtMxn.text.toString().toFloat())
+
+                startActivity(Intent)
+            }
+        }
+
 
 
     }
